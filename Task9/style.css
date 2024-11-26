@@ -1,0 +1,9 @@
+tr,td,table{
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+p {
+    color: red;
+}

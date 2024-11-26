@@ -1,0 +1,13 @@
+div {
+    display: flex;
+    padding-left: 10px;
+    align-items: center;
+    height: 50px;
+    width: 300px;
+    border: 1px solid blue;
+}
+
+input{
+    border: 2px solid dodgerblue;
+}
+
