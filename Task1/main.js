@@ -3,15 +3,16 @@ function createCheckBox(id, textContent){
     checkBox.type = 'checkbox';
     checkBox.id = id;
 
+    let label = document.createElement('label'); // Створення лейблу
+    label.textContent = textContent;
+    label.htmlFor = id; // Зв’язування лейблу з чекбоксом
+
     let br = document.createElement('br'); // Перенесення на інший рядок
 
-    let label = document.createElement('label'); // Створення лейблю
-    label.textContent = textContent;
-
-    document.getElementById('main').appendChild(checkBox);
-    document.getElementById('main').appendChild(br);
-    document.getElementById('main').appendChild(label);
-    document.getElementById('main').appendChild(br);
+    let main = document.getElementById('main');
+    main.appendChild(checkBox);
+    main.appendChild(label);
+    main.appendChild(br);
 }
 
 createCheckBox("Ua", "Ukrainian");
@@ -43,6 +44,5 @@ button.onclick = function(){ // Функція при натисканні на 
 }
 
 document.getElementById('main').appendChild(LabelList);
-let br = document.createElement('br');
-document.getElementById('main').appendChild(br);
+document.getElementById('main').appendChild(document.createElement('br'));
 document.getElementById('main').appendChild(button);
