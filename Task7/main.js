@@ -19,9 +19,9 @@ function updateRectangle() {
     rectangle.style.transform = `rotate(${rotate}deg)`;
 
     // Оновлення значень
-    widthValue.textContent = width;
-    heightValue.textContent = height;
-    rotateValue.textContent = rotate;
+    widthValue.textContent = `${width}px`;
+    heightValue.textContent = `${height}px`;
+    rotateValue.textContent = `${rotate}°`;
 }
 
 // Додавання обробників для повзунків
