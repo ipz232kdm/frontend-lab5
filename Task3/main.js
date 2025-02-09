@@ -13,73 +13,88 @@ let button = document.getElementById("button");
 let answerClick = false; // Перевірка на вибір відповіді
 
 function createTask() {
-    let num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-    let num2 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+    let num1 = Math.floor(Math.random() * 10) + 1;
+    let num2 = Math.floor(Math.random() * 10) + 1;
 
     document.getElementById("task").textContent = `${num1} x ${num2} = `;
-
     answerClick = false;
-
     let product = num1 * num2;
 
-    // Призначення класу "true" для однієї з кнопок
+    // Очищаємо класи перед новим завданням
+    radioButtons.forEach(rb => rb.classList.remove("true"));
+
+    // Випадковий вибір правильної кнопки
+    let correctIndex = Math.floor(Math.random() * radioButtons.length);
+    radioButtons[correctIndex].classList.add("true");
+
+    let usedNumbers = new Set([product]);
+
     for (let i = 0; i < radioButtons.length; i++) {
-        let randomFlag = Math.random() < 0.5;
-
-        if (randomFlag) {
-            radioButtons[i].className = "true";
-            break;
-        }
-    }
-
-    // Масив для унікальних випадкових чисел
-    let usedNumbers = [product];
-
-    // Генеруємо текст для кожного радіокнопки
-    for (let i = 0; i < radioButtons.length; i++) {
-        if (radioButtons[i].className === "true") {
-            // Якщо це "правильна" відповідь, додаємо результат множення
-            labels[i].textContent += product.toString();
-
+        if (i === correctIndex) {
+            labels[i].textContent = product.toString();
         } else {
-            // Генеруємо унікальне випадкове число
             let randomNumber;
-
-            // Продовжуємо генерувати нове число, поки воно не буде унікальним
             do {
-                randomNumber = Math.floor(Math.random() * (100 - 1)) + 1;
+                randomNumber = Math.floor(Math.random() * 100) + 1;
+            } while (usedNumbers.has(randomNumber)); // Переконуємося, що число унікальне
 
-            } while (usedNumbers.includes(randomNumber)); // Перевірка на унікальність
-
-            // Додаємо унікальне число до масиву
-            usedNumbers.push(randomNumber);
-
-            // Додаємо число до відповідного label
-            labels[i].textContent += randomNumber.toString();
+            usedNumbers.add(randomNumber);
+            labels[i].textContent = randomNumber.toString();
         }
     }
-
-    radioButtons.forEach(radioButton => {
-        radioButton.onclick = () => {
-            answerClick = true;
-
-            radioButtons.forEach(rb => {
-                rb.disabled = true;  // Вимикаємо всі кнопки
-            });
-
-            // Перевірка на правильність відповіді
-            if (radioButton.className === 'true') {
-                result.textContent = 'Вірно!';
-                correctAnswers++;
-
-            } else {
-                result.textContent = `Помилка! Правильна відповідь "${product}"`;
-            }
-            task++;
-            score.textContent = `Загальний рахунок ${correctAnswers*10}% (${correctAnswers} правильних відповідей з 10)`;
-        };
-    });
 }
+
+
+// Масив для унікальних випадкових чисел
+let usedNumbers = [product];
+
+// Генеруємо текст для кожного радіокнопки
+for (let i = 0; i < radioButtons.length; i++) {
+    if (radioButtons[i].className === "true") {
+        // Якщо це "правильна" відповідь, додаємо результат множення
+        labels[i].textContent += product.toString();
+
+    } else {
+        // Генеруємо унікальне випадкове число
+        let randomNumber;
+
+        // Продовжуємо генерувати нове число, поки воно не буде унікальним
+        do {
+            randomNumber = Math.floor(Math.random() * (100 - 1)) + 1;
+
+        } while (usedNumbers.includes(randomNumber)); // Перевірка на унікальність
+
+        // Додаємо унікальне число до масиву
+        usedNumbers.push(randomNumber);
+
+        // Додаємо число до відповідного label
+        labels[i].textContent += randomNumber.toString();
+    }
+}
+
+radioButtons.forEach(radioButton => {
+    radioButton.onclick = () => {
+        answerClick = true;
+
+        // Вимикаємо всі кнопки
+        radioButtons.forEach(rb => rb.disabled = true);
+
+        let correctAnswer = document.querySelector("input[type=radio].true"); // Отримуємо правильний варіант
+        let product = correctAnswer ? labels[Array.from(radioButtons).indexOf(correctAnswer)].textContent : "невідомо";
+
+        // Перевірка на правильність відповіді
+        if (radioButton.classList.contains('true')) {
+            result.textContent = 'Вірно!';
+            correctAnswers++;
+        } else {
+            result.textContent = `Помилка! Правильна відповідь "${product}"`;
+        }
+
+        task++;
+        score.textContent = `Загальний рахунок ${correctAnswers * 10}% (${correctAnswers} правильних відповідей з 10)`;
+    };
+});
+
 
 button.onclick = () =>{
     if (task === 10){
