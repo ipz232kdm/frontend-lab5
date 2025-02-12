@@ -1,48 +1,37 @@
-function createCheckBox(id, textContent){
-    let checkBox = document.createElement('input'); // Створення чекбоксу
+function createCheckBox(container, id, textContent) {
+    let checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
     checkBox.id = id;
 
-    let label = document.createElement('label'); // Створення лейблу
+    let label = document.createElement('label');
     label.textContent = textContent;
-    label.htmlFor = id; // Зв’язування лейблу з чекбоксом
+    label.htmlFor = id;
 
-    let br = document.createElement('br'); // Перенесення на інший рядок
-
-    let main = document.getElementById('main');
-    main.appendChild(checkBox);
-    main.appendChild(label);
-    main.appendChild(br);
+    container.append(checkBox, label, document.createElement('br'));
 }
 
-createCheckBox("Ua", "Ukrainian");
-createCheckBox("Eng", "English");
-createCheckBox("Sp", "Spanish");
+function getSelectedLanguages() {
+    return Array.from(document.querySelectorAll('#main input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.id.toLowerCase());
+}
+
+function updateLabel() {
+    labelList.textContent = getSelectedLanguages().join(", ");
+}
+
+const main = document.getElementById('main');
+const languages = [
+    { id: "Ua", text: "Ukrainian" },
+    { id: "Eng", text: "English" },
+    { id: "Sp", text: "Spanish" }
+];
+
+languages.forEach(lang => createCheckBox(main, lang.id, lang.text));
+
+let labelList = document.createElement('label');
+main.append(labelList, document.createElement('br'));
 
 let button = document.createElement('button');
 button.textContent = 'ok';
-
-let list = [];
-let LabelList = document.createElement('label');
-
-button.onclick = function(){ // Функція при натисканні на кнопку
-
-    list = [];
-    LabelList.innerHTML = '';
-
-    if (document.getElementById('Ua').checked){
-        list.push("ua")
-    }
-    if (document.getElementById('Eng').checked){
-        list.push("eng")
-    }
-    if (document.getElementById('Sp').checked){
-        list.push("sp")
-    }
-
-    LabelList.textContent = list.join(", ");
-}
-
-document.getElementById('main').appendChild(LabelList);
-document.getElementById('main').appendChild(document.createElement('br'));
-document.getElementById('main').appendChild(button);
+button.onclick = updateLabel;
+main.appendChild(button);
